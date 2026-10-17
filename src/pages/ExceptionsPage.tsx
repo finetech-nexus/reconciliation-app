@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { badgeClass, createApi, money } from '../api/client'
 import { useSession } from '../auth/Session'
+import { useI18n } from '../i18n'
 import type { ExceptionItem } from '../types'
 
 const FILTERS = ['', 'OPEN', 'PENDING_APPROVAL', 'RESOLVED', 'REOPENED']
 
 export default function ExceptionsPage() {
   const { session } = useSession()
+  const { t } = useI18n()
   const [rows, setRows] = useState<ExceptionItem[]>([])
   const [status, setStatus] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -21,22 +23,22 @@ export default function ExceptionsPage() {
     <div>
       <div className="page-head">
         <div>
-          <div className="kicker">Workflow</div>
-          <h1>Suspens</h1>
-          <p className="lead">Un écart de montant, une ambiguïté ou une écriture orpheline reste visible jusqu'à une décision tracée.</p>
+          <div className="kicker">{t('exc.kicker')}</div>
+          <h1>{t('exc.title')}</h1>
+          <p className="lead">{t('exc.lead')}</p>
         </div>
       </div>
       {error && <div className="alert">{error}</div>}
       <div className="filters" style={{ marginBottom: 14 }}>
         {FILTERS.map((item) => (
           <button key={item || 'all'} className={`chip${status === item ? ' on' : ''}`} type="button" onClick={() => setStatus(item)}>
-            {item || 'Tous'}
+            {item || t('common.all')}
           </button>
         ))}
       </div>
       <div className="table-wrap">
         <table>
-          <thead><tr><th>Suspens</th><th>Type</th><th>Compte</th><th>Référence</th><th>Montant</th><th>Priorité</th><th>Statut</th></tr></thead>
+          <thead><tr><th>{t('exc.col.item')}</th><th>{t('common.type')}</th><th>{t('common.account')}</th><th>{t('common.reference')}</th><th>{t('common.amount')}</th><th>{t('exc.col.priority')}</th><th>{t('common.status')}</th></tr></thead>
           <tbody>
             {rows.map((row) => (
               <tr key={row.exceptionId}>
@@ -49,7 +51,7 @@ export default function ExceptionsPage() {
                 <td><span className={badgeClass(row.status)}>{row.status}</span></td>
               </tr>
             ))}
-            {rows.length === 0 && <tr><td colSpan={7}>Aucun suspens sur ce filtre.</td></tr>}
+            {rows.length === 0 && <tr><td colSpan={7}>{t('exc.empty')}</td></tr>}
           </tbody>
         </table>
       </div>

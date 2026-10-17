@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { badgeClass, createApi } from '../api/client'
 import { useSession } from '../auth/Session'
+import { useI18n } from '../i18n'
 import type { ImportBatch } from '../types'
 import { EXT_SAMPLE, GL_SAMPLE } from './demo'
 
@@ -9,6 +10,7 @@ const canImport = (role?: string) => role === 'RECON_OPERATOR' || role === 'RECO
 
 export default function ImportsPage() {
   const { session } = useSession()
+  const { t } = useI18n()
   const navigate = useNavigate()
   const [rows, setRows] = useState<ImportBatch[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -44,7 +46,7 @@ export default function ImportsPage() {
       }
       navigate(`/imports/${created.importId}`)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Import refusé')
+      setError(e instanceof Error ? e.message : t('imp.refused'))
     } finally {
       setBusy(false)
     }
@@ -54,53 +56,54 @@ export default function ImportsPage() {
     <div>
       <div className="page-head">
         <div>
-          <div className="kicker">Ingestion</div>
-          <h1>Lots d'import</h1>
-          <p className="lead">Le lot est reçu avant d'être déclaré conforme. Un rejeu du même identifiant source ne crée pas de doublon.</p>
+          <div className="kicker">{t('imp.kicker')}</div>
+          <h1>{t('imp.title')}</h1>
+          <p className="lead">{t('imp.lead')}</p>
         </div>
+        <Link className="btn" to="/guide">{t('imp.guide')}</Link>
       </div>
       {error && <div className="alert">{error}</div>}
       {canImport(session?.role) && (
         <form className="form-panel" onSubmit={submit} style={{ marginBottom: 22 }}>
-          <h2 className="section-title">Nouveau lot</h2>
+          <h2 className="section-title">{t('imp.new')}</h2>
           <div className="fields">
-            <label className="field">Système
+            <label className="field">{t('imp.system')}
               <select value={sourceSystem} onChange={(e) => setSourceSystem(e.target.value)}>
                 <option value="FINERACT">FINERACT</option>
                 <option value="BCT">BCT</option>
                 <option value="CORRESPONDENT">CORRESPONDENT</option>
               </select>
             </label>
-            <label className="field">Type
+            <label className="field">{t('imp.type')}
               <select value={sourceType} onChange={(e) => {
                 const next = e.target.value
                 setSourceType(next)
                 setFile(next === 'ACCOUNTING_ENTRIES' ? GL_SAMPLE : EXT_SAMPLE)
                 setSourceSystem(next === 'ACCOUNTING_ENTRIES' ? 'FINERACT' : 'BCT')
               }}>
-                <option value="ACCOUNTING_ENTRIES">Écritures comptables</option>
-                <option value="EXTERNAL_TRANSACTIONS">Mouvements externes</option>
+                <option value="ACCOUNTING_ENTRIES">{t('imp.accounting')}</option>
+                <option value="EXTERNAL_TRANSACTIONS">{t('imp.external')}</option>
               </select>
             </label>
-            <label className="field">Date métier<input value={businessDate} onChange={(e) => setBusinessDate(e.target.value)} /></label>
-            <label className="field">Identifiant source<input value={sourceBatchId} onChange={(e) => setSourceBatchId(e.target.value)} /></label>
-            <label className="field">Devise<input value={currency} onChange={(e) => setCurrency(e.target.value.toUpperCase())} maxLength={3} /></label>
-            <label className="field">Total de contrôle<input value={controlTotal} placeholder="optionnel" onChange={(e) => setControlTotal(e.target.value)} /></label>
-            <label className="field full">Fichier CSV canonique
+            <label className="field">{t('imp.date')}<input value={businessDate} onChange={(e) => setBusinessDate(e.target.value)} /></label>
+            <label className="field">{t('imp.batch')}<input value={sourceBatchId} onChange={(e) => setSourceBatchId(e.target.value)} /></label>
+            <label className="field">{t('common.currency')}<input value={currency} onChange={(e) => setCurrency(e.target.value.toUpperCase())} maxLength={3} /></label>
+            <label className="field">{t('imp.control')}<input value={controlTotal} placeholder={t('imp.optional')} onChange={(e) => setControlTotal(e.target.value)} /></label>
+            <label className="field full">{t('imp.file')}
               <textarea className="code" value={file} onChange={(e) => setFile(e.target.value)} />
             </label>
           </div>
           <div className="row-actions" style={{ marginTop: 14 }}>
-            <button className="btn" type="button" onClick={() => setFile(GL_SAMPLE)}>Jeu comptable</button>
-            <button className="btn" type="button" onClick={() => { setFile(EXT_SAMPLE); setSourceType('EXTERNAL_TRANSACTIONS'); setSourceSystem('BCT') }}>Jeu externe</button>
-            <button className="btn primary" type="submit" disabled={busy}>{busy ? 'Contrôle…' : 'Importer'}</button>
+            <button className="btn" type="button" onClick={() => setFile(GL_SAMPLE)}>{t('imp.gl')}</button>
+            <button className="btn" type="button" onClick={() => { setFile(EXT_SAMPLE); setSourceType('EXTERNAL_TRANSACTIONS'); setSourceSystem('BCT') }}>{t('imp.ext')}</button>
+            <button className="btn primary" type="submit" disabled={busy}>{busy ? t('imp.busy') : t('imp.submit')}</button>
           </div>
         </form>
       )}
       <div className="table-wrap">
         <table>
           <thead>
-            <tr><th>Lot</th><th>Source</th><th>Date</th><th>Statut</th><th>Acceptées</th><th>Rejetées</th></tr>
+            <tr><th>{t('imp.col.batch')}</th><th>{t('imp.col.source')}</th><th>{t('imp.col.date')}</th><th>{t('common.status')}</th><th>{t('imp.col.accepted')}</th><th>{t('imp.col.rejected')}</th></tr>
           </thead>
           <tbody>
             {rows.map((row) => (
@@ -113,7 +116,7 @@ export default function ImportsPage() {
                 <td>{row.rejectedRecords + row.quarantinedRecords}</td>
               </tr>
             ))}
-            {rows.length === 0 && <tr><td colSpan={6}>Aucun lot pour le moment.</td></tr>}
+            {rows.length === 0 && <tr><td colSpan={6}>{t('imp.empty')}</td></tr>}
           </tbody>
         </table>
       </div>

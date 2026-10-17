@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { createApi } from '../api/client'
 import { useSession } from '../auth/Session'
+import { useI18n } from '../i18n'
 import type { Account } from '../types'
 
 export default function AccountsPage() {
   const { session } = useSession()
+  const { t } = useI18n()
   const [rows, setRows] = useState<Account[]>([])
   const [error, setError] = useState<string | null>(null)
 
@@ -17,9 +19,9 @@ export default function AccountsPage() {
     <div>
       <div className="page-head">
         <div>
-          <div className="kicker">Référentiel</div>
-          <h1>Comptes et correspondants</h1>
-          <p className="lead">Le périmètre de comptes est contrôlé côté serveur. Un acteur sans périmètre explicite voit le référentiel de lancement.</p>
+          <div className="kicker">{t('acc.kicker')}</div>
+          <h1>{t('acc.title')}</h1>
+          <p className="lead">{t('acc.lead')}</p>
         </div>
       </div>
       {error && <div className="alert">{error}</div>}

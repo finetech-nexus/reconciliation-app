@@ -186,6 +186,28 @@ h3 { letter-spacing: -.025em; }
 .chip.on { color: #155d52; border-color: #a8e4d7; background: var(--accent-soft); }
 .language-tabs { gap: 6px; }
 .language-tabs .chip { padding: 7px 10px; font-size: 10px; }
+html[lang="ar"] body { font-family: 'Noto Sans Arabic', Inter, ui-sans-serif, system-ui, sans-serif; }
+.source-stack { display: grid; gap: 16px; }
+.source-card h2 { margin: 0 0 8px; font-size: 18px; }
+.source-block { margin-top: 12px; }
+.source-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.source-sample {
+  margin: 0;
+  padding: 14px 16px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f7fafb;
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre;
+  direction: ltr;
+  text-align: left;
+}
+.source-outcomes { margin: 8px 0 0; padding-inline-start: 18px; }
+.source-outcomes li { margin: 8px 0; }
 .btn {
   display: inline-flex;
   align-items: center;

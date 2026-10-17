@@ -1,22 +1,26 @@
 import type { ReactNode } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { ACTORS, useSession } from './auth/Session'
+import { useSession } from './auth/Session'
+import { LANGS, useI18n, type MessageKey } from './i18n'
 
-const NAV = [
-  { to: '/', label: 'Vue d\'ensemble', icon: '◫', end: true },
-  { to: '/imports', label: 'Imports', icon: '▤' },
-  { to: '/reconciliations', label: 'Rapprochements', icon: '⇄' },
-  { to: '/exceptions', label: 'Suspens', icon: '◈' },
-  { to: '/accounts', label: 'Comptes', icon: '◎' },
-  { to: '/reports', label: 'Rapport', icon: '◇' },
-  { to: '/audit', label: 'Piste d\'audit', icon: '✳' },
+const NAV: { to: string; label: MessageKey; icon: string; end?: boolean }[] = [
+  { to: '/', label: 'nav.overview', icon: '◫', end: true },
+  { to: '/imports', label: 'nav.imports', icon: '▤' },
+  { to: '/reconciliations', label: 'nav.runs', icon: '⇄' },
+  { to: '/exceptions', label: 'nav.exceptions', icon: '◈' },
+  { to: '/accounts', label: 'nav.accounts', icon: '◎' },
+  { to: '/reports', label: 'nav.report', icon: '◇' },
+  { to: '/audit', label: 'nav.audit', icon: '✳' },
+  { to: '/guide', label: 'nav.guide', icon: '☰' },
 ]
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { session, signOut } = useSession()
   const { pathname } = useLocation()
+  const { t, lang, setLang } = useI18n()
   const current = NAV.find((item) => (item.end ? pathname === '/' : pathname.startsWith(item.to)))
-  const actor = session ? ACTORS[session.role] : null
+  const roleLabel = session ? t(`role.${session.role}.label` as MessageKey) : ''
+  const roleHint = session ? t(`role.${session.role}.hint` as MessageKey) : ''
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -30,16 +34,16 @@ export default function Layout({ children }: { children: ReactNode }) {
         {NAV.map((item) => (
           <NavLink key={item.to} to={item.to} end={item.end} className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
             <span className="nav-icon" aria-hidden="true">{item.icon}</span>
-            <span>{item.label}</span>
+            <span>{t(item.label)}</span>
           </NavLink>
         ))}
         <div className="sidebar-foot">
           <div className="sidebar-note">
-            <strong>{actor?.label}</strong>
-            <span>{actor?.hint}. Le contrôle d'accès est appliqué par l'API.</span>
+            <strong>{roleLabel}</strong>
+            <span>{roleHint}. {t('layout.note')}</span>
           </div>
           <button className="btn ghost" type="button" onClick={signOut} style={{ width: '100%' }}>
-            Changer de rôle
+            {t('layout.switch')}
           </button>
         </div>
       </aside>
@@ -48,11 +52,18 @@ export default function Layout({ children }: { children: ReactNode }) {
           <div className="breadcrumb">
             <span>Reconcilia</span>
             <span className="breadcrumb-separator">/</span>
-            <strong>{current?.label ?? 'Atelier'}</strong>
+            <strong>{current ? t(current.label) : t('layout.fallback')}</strong>
           </div>
           <div className="workspace-tools">
+            <div className="filters language-tabs" role="group" aria-label="Language">
+              {LANGS.map((code) => (
+                <button key={code} className={`chip${lang === code ? ' on' : ''}`} type="button" onClick={() => setLang(code)}>
+                  {code.toUpperCase()}
+                </button>
+              ))}
+            </div>
             <span className="workspace-tag">{session?.role}</span>
-            <span className="user-avatar" aria-label={actor?.label}>{actor?.label.slice(0, 1)}</span>
+            <span className="user-avatar" aria-label={roleLabel}>{roleLabel.slice(0, 1)}</span>
           </div>
         </div>
         {children}

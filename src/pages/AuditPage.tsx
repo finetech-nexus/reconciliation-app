@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { createApi } from '../api/client'
 import { useSession } from '../auth/Session'
+import { useI18n } from '../i18n'
 import type { AuditEvent } from '../types'
 
 export default function AuditPage() {
   const { session } = useSession()
+  const { t } = useI18n()
   const [rows, setRows] = useState<AuditEvent[]>([])
   const [error, setError] = useState<string | null>(null)
   const allowed = session?.role === 'RECON_AUDITOR' || session?.role === 'RECON_ADMIN'
@@ -17,8 +19,8 @@ export default function AuditPage() {
   if (!allowed) {
     return (
       <div>
-        <div className="page-head"><div><div className="kicker">Audit</div><h1>Piste d'audit</h1></div></div>
-        <div className="empty">Réservé aux rôles auditeur et administrateur. Le refus est aussi journalisé par l'API.</div>
+        <div className="page-head"><div><div className="kicker">{t('aud.kicker')}</div><h1>{t('aud.title')}</h1></div></div>
+        <div className="empty">{t('aud.denied')}</div>
       </div>
     )
   }
@@ -27,15 +29,15 @@ export default function AuditPage() {
     <div>
       <div className="page-head">
         <div>
-          <div className="kicker">Audit</div>
-          <h1>Piste d'audit</h1>
-          <p className="lead">Commandes, refus d'accès et auto-validations bloquées. Les lectures passent par les journaux de la passerelle.</p>
+          <div className="kicker">{t('aud.kicker')}</div>
+          <h1>{t('aud.title')}</h1>
+          <p className="lead">{t('aud.lead')}</p>
         </div>
       </div>
       {error && <div className="alert">{error}</div>}
       <div className="table-wrap">
         <table>
-          <thead><tr><th>Quand</th><th>Action</th><th>Entité</th><th>Acteur</th><th>Détail</th></tr></thead>
+          <thead><tr><th>{t('aud.when')}</th><th>{t('aud.action')}</th><th>{t('aud.entity')}</th><th>{t('aud.actor')}</th><th>{t('aud.detail')}</th></tr></thead>
           <tbody>
             {rows.map((row) => (
               <tr key={`${row.eventTime}-${row.action}-${row.entityId}`}>
