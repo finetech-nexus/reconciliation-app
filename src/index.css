@@ -191,6 +191,7 @@ html[lang="ar"] body { font-family: 'Noto Sans Arabic', Inter, ui-sans-serif, sy
 .source-card h2 { margin: 0 0 8px; font-size: 18px; }
 .source-block { margin-top: 12px; }
 .source-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.source-actions { display: flex; gap: 6px; }
 .source-sample {
   margin: 0;
   padding: 14px 16px;

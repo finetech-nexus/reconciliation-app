@@ -8,12 +8,27 @@ GL-006;BCT-TND-001;2026-10-16;2026-10-16;TND;5000.000;DEBIT;REF-AMB
 GL-007;BCT-TND-001;2026-10-16;2026-10-16;TND;1500.000;CREDIT;REF-ORPHAN
 `
 
-export const EXT_SAMPLE = `source_id;account_id;booking_date;value_date;currency;amount;direction;reference
+export const BCT_SAMPLE = `source_id;account_id;booking_date;value_date;currency;amount;direction;reference
 TX-001;BCT-TND-001;2026-10-16;2026-10-16;TND;25000.000;DEBIT;REF-001
 TX-002;BCT-TND-001;2026-10-16;2026-10-16;TND;12000.000;CREDIT;REF-002
 TX-003;BCT-TND-001;2026-10-16;2026-10-16;TND;8000.000;DEBIT;REF-005
 TX-004;BCT-TND-001;2026-10-16;2026-10-16;TND;5000.000;DEBIT;REF-AMB
 TX-005;BCT-TND-001;2026-10-16;2026-10-16;TND;700.000;DEBIT;REF-NONE
+`
+
+export const SIBTEL_SAMPLE = `source_id;account_id;booking_date;value_date;currency;amount;direction;reference
+SIB-001;CORR-TND-08;2026-10-16;2026-10-16;TND;1500.000;DEBIT;VIR-BIAT-001
+SIB-002;CORR-TND-08;2026-10-16;2026-10-16;TND;320.500;CREDIT;PRE-BIAT-014
+`
+
+export const SMT_SAMPLE = `source_id;account_id;booking_date;value_date;currency;amount;direction;reference
+SMT-001;SMT-TND-001;2026-10-16;2026-10-16;TND;860.000;CREDIT;CAP-4412
+SMT-002;SMT-TND-001;2026-10-16;2026-10-16;TND;40.000;DEBIT;REFUND-4418
+`
+
+export const SWIFT_SAMPLE = `source_id;account_id;booking_date;value_date;currency;amount;direction;reference
+SW-001;CORR-EUR-014;2026-10-16;2026-10-16;EUR;10000.000;CREDIT;FT261016NEXUS
+SW-002;CORR-EUR-014;2026-10-16;2026-10-16;EUR;25.000;DEBIT;CHG261016
 `
 
 export const REVERSAL_GL_SAMPLE = `source_id;account_id;booking_date;value_date;currency;amount;direction;reference
@@ -40,18 +55,3 @@ export const GL_JSON_SAMPLE = `{
 }
 `
 
-export const EXT_JSON_SAMPLE = `{
-  "records": [
-    {
-      "sourceRecordId": "TX-001",
-      "accountCode": "BCT-TND-001",
-      "bookingDate": "2026-10-16",
-      "valueDate": "2026-10-16",
-      "currency": "TND",
-      "amount": "25000.000",
-      "direction": "DEBIT",
-      "reference": "REF-001"
-    }
-  ]
-}
-`
