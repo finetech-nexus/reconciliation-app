@@ -25,7 +25,7 @@ async function request<T>(session: Session, path: string, init: RequestInit = {}
   const text = await response.text()
   const body = text ? JSON.parse(text) : null
   if (!response.ok) {
-    throw new Error(body?.message || `Erreur ${response.status}`)
+    throw new Error(body?.detail || body?.message || `Erreur ${response.status}`)
   }
   return body as T
 }
@@ -39,12 +39,15 @@ export function createApi(session: Session) {
     records: (id: string) => request<Page<ImportRecord>>(session, `/api/v1/imports/${id}/records?size=50`),
     createImport: (payload: unknown) =>
       request<ImportBatch>(session, '/api/v1/imports', { method: 'POST', body: JSON.stringify(payload) }),
-    upload: (id: string, csv: string) =>
-      request<ImportBatch>(session, `/api/v1/imports/${id}/files`, {
+    upload: (id: string, file: string) => {
+      const trimmed = file.trimStart()
+      const json = trimmed.startsWith('{') || trimmed.startsWith('[')
+      return request<ImportBatch>(session, `/api/v1/imports/${id}/files`, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/csv' },
-        body: csv,
-      }),
+        headers: { 'Content-Type': json ? 'application/json' : 'text/csv' },
+        body: file,
+      })
+    },
     commit: (id: string, controlTotal?: string) =>
       request<ImportBatch>(session, `/api/v1/imports/${id}/commit`, {
         method: 'POST',
