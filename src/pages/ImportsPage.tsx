@@ -15,7 +15,6 @@ export default function ImportsPage() {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [sourceSystem, setSourceSystem] = useState('CORE_BANKING')
-  const [sourceType, setSourceType] = useState('ACCOUNTING_ENTRIES')
   const [sourceBatchId, setSourceBatchId] = useState(`LOT-${Date.now()}`)
   const [businessDate, setBusinessDate] = useState('2026-10-16')
   const [currency, setCurrency] = useState('TND')
@@ -40,6 +39,7 @@ export default function ImportsPage() {
         return
       }
       const api = createApi(session)
+      const sourceType = sourceSystem === 'CORE_BANKING' ? 'ACCOUNTING_ENTRIES' : 'EXTERNAL_TRANSACTIONS'
       const created = await api.createImport({
         sourceSystem, sourceType, businessDate, sourceBatchId, currency, expectedRecordCount: 0, metadata: { schemaVersion: '1.0' },
       })
@@ -93,23 +93,14 @@ export default function ImportsPage() {
                   <option value="CORRESPONDENT">{t('imp.system.corr')}</option>
                 </select>
               </label>
-              {sourceSystem === 'CORE_BANKING' && (
-                <button className="btn" type="button" disabled={busy} onClick={restCall} style={{ marginTop: 8 }}>
+            </div>
+            {sourceSystem === 'CORE_BANKING' && (
+              <label className="field">{t('imp.pull.submit')}
+                <button className="btn" type="button" disabled={busy} onClick={restCall}>
                   {t('imp.pull.submit')}
                 </button>
-              )}
-            </div>
-            <label className="field">{t('imp.type')}
-              <select value={sourceType} onChange={(e) => {
-                const next = e.target.value
-                setSourceType(next)
-                if (next === 'ACCOUNTING_ENTRIES') setSourceSystem('CORE_BANKING')
-                else if (sourceSystem === 'CORE_BANKING') setSourceSystem('BCT')
-              }}>
-                <option value="ACCOUNTING_ENTRIES">{t('imp.accounting')}</option>
-                <option value="EXTERNAL_TRANSACTIONS">{t('imp.external')}</option>
-              </select>
-            </label>
+              </label>
+            )}
             <label className="field">{t('imp.date')}<input value={businessDate} onChange={(e) => setBusinessDate(e.target.value)} /></label>
             <label className="field">{t('imp.batch')}<input value={sourceBatchId} onChange={(e) => setSourceBatchId(e.target.value)} /></label>
             <label className="field">{t('common.currency')}<input value={currency} onChange={(e) => setCurrency(e.target.value.toUpperCase())} maxLength={3} /></label>
