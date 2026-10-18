@@ -95,11 +95,9 @@ export default function ImportsPage() {
               </label>
             </div>
             {sourceSystem === 'CORE_BANKING' && (
-              <label className="field">{t('imp.pull.submit')}
-                <button className="btn" type="button" disabled={busy} onClick={restCall}>
-                  {t('imp.pull.submit')}
-                </button>
-              </label>
+              <button className="btn small" type="button" disabled={busy} onClick={restCall}>
+                {t('imp.pull.submit')}
+              </button>
             )}
             <label className="field">{t('imp.date')}<input value={businessDate} onChange={(e) => setBusinessDate(e.target.value)} /></label>
             <label className="field">{t('imp.batch')}<input value={sourceBatchId} onChange={(e) => setSourceBatchId(e.target.value)} /></label>
