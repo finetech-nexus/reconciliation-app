@@ -11,6 +11,7 @@ import ExceptionsPage from './pages/ExceptionsPage'
 import ImportDetail from './pages/ImportDetail'
 import ImportsPage from './pages/ImportsPage'
 import GuidePage from './pages/GuidePage'
+import SettingsPage from './pages/SettingsPage'
 import ReconciliationDetail from './pages/ReconciliationDetail'
 import ReconciliationsPage from './pages/ReconciliationsPage'
 import ReportPage from './pages/ReportPage'
@@ -58,6 +59,7 @@ function Protected() {
         <Route path="/accounts" element={<AccountsPage />} />
         <Route path="/reports" element={<ReportPage />} />
         <Route path="/audit" element={<AuditPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/guide" element={<GuidePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

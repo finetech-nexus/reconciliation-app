@@ -11,6 +11,7 @@ const NAV: { to: string; label: MessageKey; icon: string; end?: boolean }[] = [
   { to: '/accounts', label: 'nav.accounts', icon: '◎' },
   { to: '/reports', label: 'nav.report', icon: '◇' },
   { to: '/audit', label: 'nav.audit', icon: '✳' },
+  { to: '/settings', label: 'nav.settings', icon: '⚙' },
   { to: '/guide', label: 'nav.guide', icon: '☰' },
 ]
 

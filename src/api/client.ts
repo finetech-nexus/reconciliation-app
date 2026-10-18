@@ -73,7 +73,45 @@ export function createApi(session: Session) {
         body: JSON.stringify({ comment }),
       }),
     audit: () => request<Page<AuditEvent>>(session, '/api/v1/audit?size=40'),
+    coreProfile: () => request<CoreProfile>(session, '/api/v1/settings/core-banking'),
+    saveCore: (payload: unknown) =>
+      request<CoreProfile>(session, '/api/v1/settings/core-banking', { method: 'PUT', body: JSON.stringify(payload) }),
+    correspondents: () => request<Correspondent[]>(session, '/api/v1/settings/correspondents'),
+    createCorrespondent: (payload: unknown) =>
+      request<Correspondent>(session, '/api/v1/settings/correspondents', { method: 'POST', body: JSON.stringify(payload) }),
+    cursors: () => request<StatementCursor[]>(session, '/api/v1/settings/cursors'),
+    purge: (confirmation: string) =>
+      request<{ purged: boolean }>(session, '/api/v1/settings/purge', {
+        method: 'POST',
+        body: JSON.stringify({ confirmation }),
+      }),
+    pullCore: (businessDate: string, currency: string) =>
+      request<ImportBatch>(session, '/api/v1/imports/core-banking/pull', {
+        method: 'POST',
+        body: JSON.stringify({ businessDate, currency }),
+      }),
   }
+}
+
+export type CoreProfile = {
+  sourceSystem: string
+  connectorType: 'FINERACT' | 'T24'
+  baseUrl: string
+  tenant: string
+  accountsPath: string
+  entriesPath: string
+  configured: boolean
+}
+
+export type Correspondent = { code: string; name: string; bic: string | null; currency: string; accountCode: string }
+
+export type StatementCursor = {
+  sourceSystem: string
+  accountCode: string
+  lastBusinessDate: string | null
+  lastSequence: number
+  lastBatchPublicId: string | null
+  gapDetected: boolean
 }
 
 export function badgeClass(status: string) {

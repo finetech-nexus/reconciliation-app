@@ -66,6 +66,11 @@ export default function GuidePage() {
           <Sample label={t('guide.reversal.books')} value={REVERSAL_GL_SAMPLE} />
           <Sample label={t('guide.reversal.external')} value={REVERSAL_EXT_SAMPLE} />
         </Section>
+        <Section title={t('guide.recurrent.title')} body={t('guide.recurrent.body')}>
+          <p className="meta">{t('guide.recurrent.core')}</p>
+          <p className="meta">{t('guide.recurrent.bct')}</p>
+          <p className="meta">{t('guide.recurrent.corr')}</p>
+        </Section>
         <section className="card source-card">
           <h2>{t('guide.outcomes')}</h2>
           <ul className="source-outcomes">
