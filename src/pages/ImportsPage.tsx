@@ -90,7 +90,9 @@ export default function ImportsPage() {
                 <select value={sourceSystem} onChange={(e) => setSourceSystem(e.target.value)}>
                   <option value="CORE_BANKING">{t('imp.system.core')}</option>
                   <option value="BCT">BCT</option>
-                  <option value="CORRESPONDENT">{t('imp.system.corr')}</option>
+                  <option value="SIBTEL">SIBTEL</option>
+                  <option value="SMT">SMT</option>
+                  <option value="SWIFT">SWIFT</option>
                 </select>
               </label>
             </div>

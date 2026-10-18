@@ -69,7 +69,9 @@ export default function GuidePage() {
         <Section title={t('guide.recurrent.title')} body={t('guide.recurrent.body')}>
           <p className="meta">{t('guide.recurrent.core')}</p>
           <p className="meta">{t('guide.recurrent.bct')}</p>
-          <p className="meta">{t('guide.recurrent.corr')}</p>
+          <p className="meta">{t('guide.recurrent.sibtel')}</p>
+          <p className="meta">{t('guide.recurrent.smt')}</p>
+          <p className="meta">{t('guide.recurrent.swift')}</p>
         </Section>
         <section className="card source-card">
           <h2>{t('guide.outcomes')}</h2>
